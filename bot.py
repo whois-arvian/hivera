@@ -41,7 +41,7 @@ def exit_handler(sig, frame):
 
 signal.signal(signal.SIGINT, exit_handler)
 
-auth_data_file = "data.txt"
+auth_data_file = "token.txt"
 auth_data_list = []
 
 try:
