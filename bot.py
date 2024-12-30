@@ -123,17 +123,29 @@ def post_request(auth_data, username, proxy=None):
 
     try:
         if proxy:
-            response = requests.post(f"{contribute_url}?auth_data={auth_data}", json=payload, headers={"Content-Type": "application/json"}, proxies={"http": proxy, "https": proxy})
+            response = requests.post(
+                f"{contribute_url}?auth_data={auth_data}",
+                json=payload,
+                headers={"Content-Type": "application/json"},
+                proxies={"http": proxy, "https": proxy}
+            )
         else:
-            response = requests.post(f"{contribute_url}?auth_data={auth_data}", json=payload, headers={"Content-Type": "application/json"})
+            response = requests.post(
+                f"{contribute_url}?auth_data={auth_data}",
+                json=payload,
+                headers={"Content-Type": "application/json"}
+            )
         
         if response.status_code == 200:
             return True, response.json()
         else:
-            return False, response.text
+            error_message = f"Failed request with status {response.status_code}: {response.text}"
+            log_error(error_message)
+            return False, error_message
     except Exception as e:
-        log_error(f"Error sending request: {e}")
-        return False, "Error occurred"
+        error_message = f"Error sending request: {e}"
+        log_error(error_message)
+        return False, error_message
 
 def print_header(title):
     print(f"\n{Fore.MAGENTA}{Style.BRIGHT}{title}{Style.RESET_ALL}")
@@ -162,7 +174,7 @@ if __name__ == "__main__":
                     hivera_balance = response.get('result', {}).get('profile', {}).get('HIVERA', 0)
                     print(f"{Fore.GREEN}Ping successful! Balance: {hivera_balance}{Style.RESET_ALL}")
                 else:
-                    print(f"{Fore.RED}Request failed.{Style.RESET_ALL}")
+                    print(f"{Fore.RED}Request failed: {response}{Style.RESET_ALL}")
             else:
                 print(f"{Fore.RED}Power is low: {current_power}/{power_capacity}{Style.RESET_ALL}")
             
