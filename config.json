@@ -1,5 +1,4 @@
 {
-    "min_power": 1000,
-    "use_proxy": false
-  }
-  
+  "min_power": 1000,
+  "use_proxy": true
+}
